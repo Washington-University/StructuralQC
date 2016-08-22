@@ -1,4 +1,4 @@
-# HCP Pipelines
+# Structural QC
 
 ## License
 
