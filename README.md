@@ -13,7 +13,7 @@ Authors: Michael Harms and Donna Dierker
 2. Unzip the archive in a directory where you have read permission.
 
 The archive contains:
-i) a single script -- GenerateStructuralScenes.sh
+i) a single script -- GenerateStructuralScenes.sh and
 ii) a 'templates' directory that contains files that are needed to
 render the scenes.
 
@@ -23,8 +23,11 @@ You will probably invoke the script multiple times
 3. Use a text editor to edit the following variables:
 
 SubjList="176239 199958 415837 433839 943862 987983"
+
 OutputFolder="/location/of/my/QC/output/directory"
+
 StudyFolder="/location/of/subject/data/directories"
+
 TemplateFolder="/location/of/unpacked/StructuralQC/templates"
 
 * SubjList is a space delimited list of subject ID's to be processed.
