@@ -52,6 +52,7 @@ TemplateFolder="/location/of/unpacked/StructuralQC/templates"
 5. Confirm the scenes were generated:
 
 	cd $StudyFolder
+	
 	ls
 
 There should be one scene file for each subject in $SubjList.
