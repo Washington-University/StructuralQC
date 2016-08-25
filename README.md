@@ -11,16 +11,14 @@ Authors: Michael Harms and Donna Dierker
     * Visit: https://github.com/Washington-University/StructuralQC
     * Choose the `Clone or download` pulldown near the upper right
     * Select the `Download Zip` link on the pulldown
+
+2. Unzip the archive in a directory where you have read and write permission.
+
     * The resulting subdirectory will be named `StructuralQC-master`
-
-2. Unzip the archive in a directory where you have read permission.
-
-    The archive contains:
-
-    * a single script -- `GenerateStructuralScenes.sh` and
-    * a `templates` directory that contains files that are needed to render the scenes.
-
-    You will probably invoke the script multiple times (i.e., for different batches of subjects).
+	* The StructuralQC-master directory will contain:
+        * a single script -- `GenerateStructuralScenes.sh` and
+        * a `templates` directory that contains files that are needed to render the scenes.
+    * You will probably invoke the script multiple times (i.e., for different batches of subjects).
 
 3. Use a text editor to edit the following variables:
 
