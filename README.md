@@ -10,12 +10,12 @@ Authors: Michael Harms and Donna Dierker
 
     * Visit: https://github.com/Washington-University/StructuralQC/releases
     * Under `Downloads` choose the `Source code (zip)` link for the latest release
-    * The resulting `.zip` file will be named `StructuralQC-x.y.z` where `x.y.z` reflect the version number.
+    * The resulting `.zip` file will be named `StructuralQC-x.y.z` where `x.y.z` reflects the version number.
 
 2. Unzip the archive in a directory where you have read and write permission.
 
-    * The resulting subdirectory will be named `StructuralQC-x.y.z` (e.g. StructuralQC-1.0.1)
-	* The StructuralQC-x.y.z directory will contain:
+    * The resulting subdirectory will be named `StructuralQC-x.y.z` (e.g., StructuralQC-1.0.2)
+    * The StructuralQC-x.y.z directory will contain:
         * a single script -- `GenerateStructuralScenes.sh` and
         * a `templates` directory that contains files that are needed to render the scenes.
     * You will probably invoke the script multiple times (i.e., for different batches of subjects).
@@ -24,7 +24,7 @@ Authors: Michael Harms and Donna Dierker
 
     ~~~~
     SubjList="176239 199958 415837 433839 943862 987983"
-	OutputFolder="/location/of/my/QC/output/directory"
+    OutputFolder="/location/of/my/QC/output/directory"
     StudyFolder="/location/of/subject/data/directories"
     TemplateFolder="/location/of/unpacked/StructuralQC/templates"
     ~~~~
@@ -50,8 +50,8 @@ Authors: Michael Harms and Donna Dierker
 5. Confirm the scenes were generated:
 
     ~~~~
-	cd $StudyFolder	
-	ls
+    cd $StudyFolder
+    ls
     ~~~~
 
     There should be one scene file for each subject in `SubjList`.
@@ -60,5 +60,5 @@ Authors: Michael Harms and Donna Dierker
 6. View the scene file using wb_view:
 
     ~~~~
-	wb_view "$Subject".structuralQC.wb.scene
-	~~~~
+    wb_view "$Subject".structuralQC.wb.scene
+    ~~~~
