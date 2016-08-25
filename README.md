@@ -8,7 +8,10 @@ Authors: Michael Harms and Donna Dierker
 
 1. Download the StructuralQC.zip archive from GitHub:
 
-    https://github.com/Washington-University/StructuralQC
+    * Visit: https://github.com/Washington-University/StructuralQC
+    * Choose the `Clone or download` pulldown near the upper right
+    * Select the `Download Zip` link on the pulldown
+    * The resulting subdirectory will be named `StructuralQC-master`
 
 2. Unzip the archive in a directory where you have read permission.
 
