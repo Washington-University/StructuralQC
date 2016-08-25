@@ -14,24 +14,22 @@ Authors: Michael Harms and Donna Dierker
 
     The archive contains:
 
-    * a single script -- GenerateStructuralScenes.sh and
-    * a 'templates' directory that contains files that are needed to render the scenes.
+    * a single script -- `GenerateStructuralScenes.sh` and
+    * a `templates` directory that contains files that are needed to render the scenes.
 
     You will probably invoke the script multiple times (i.e., for different batches of subjects).
 
 3. Use a text editor to edit the following variables:
 
-    `SubjList="176239 199958 415837 433839 943862 987983"`
-	`OutputFolder="/location/of/my/QC/output/directory"`
+    ~~~~
+    SubjList="176239 199958 415837 433839 943862 987983"
+	OutputFolder="/location/of/my/QC/output/directory"
+    StudyFolder="/location/of/subject/data/directories"
+    TemplateFolder="/location/of/unpacked/StructuralQC/templates"
+    ~~~~
 
-  StudyFolder="/location/of/subject/data/directories"
-
-  TemplateFolder="/location/of/unpacked/StructuralQC/templates"
-
-  * SubjList is a space delimited list of subject ID's to be processed.
-
-  * OutputFolder is where you want the per-subject scenes (and copies of the
-    files in the 'templates' directory) to be located.
+    * `SubjList` is a space delimited list of subject ID's to be processed.
+    * `OutputFolder` is where you want the per-subject scenes (and copies of the files in the `templates` directory) to be located.
 
   * StudyFolder is the directory containing the subject data (organized in
   	standard Connectome DB file structure).  It is used to replace a dummy
