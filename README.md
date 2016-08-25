@@ -8,18 +8,18 @@ Authors: Michael Harms and Donna Dierker
 
 1. Download the StructuralQC.zip archive from GitHub:
 
-	https://github.com/Washington-University/StructuralQC
+    https://github.com/Washington-University/StructuralQC
 
-# Unzip the archive in a directory where you have read permission.
+2. Unzip the archive in a directory where you have read permission.
 
-   The archive contains:
-   i) a single script -- GenerateStructuralScenes.sh and
-   ii) a 'templates' directory that contains files that are needed to render the scenes.
+    The archive contains:
 
-   You will probably invoke the script multiple times
-   (i.e., for different batches of subjects).
+    a. a single script -- GenerateStructuralScenes.sh and
+    b. a 'templates' directory that contains files that are needed to render the scenes.
 
-# Use a text editor to edit the following variables:
+    You will probably invoke the script multiple times (i.e., for different batches of subjects).
+
+3. Use a text editor to edit the following variables:
 
   SubjList="176239 199958 415837 433839 943862 987983"
 
