@@ -29,32 +29,35 @@ Authors: Michael Harms and Donna Dierker
     ~~~~
 
     * `SubjList` is a space delimited list of subject ID's to be processed.
-    * `OutputFolder` is where you want the per-subject scenes (and copies of the files in the `templates` directory) to be located.
+    * `OutputFolder` is where you want the per-subject scenes (and copies 
+      of the files in the `templates` directory) to be located.
+    * `StudyFolder` is the directory containing the subject data (organized in
+      standard ConnectomeDB file structure).  It is used to replace a dummy
+      string in the template scene so that the generated per-subject scene
+      file can find the necessary file inputs.
+    * `TemplateFolder` is the location of the unzipped `StructuralQC.zip`
+      folder on your system. The script will copy reference files (S900* and
+      mean MNI152 T1 atlas target) to your `OutputFolder`, so that the scenes 
+      can find them.
 
-  * StudyFolder is the directory containing the subject data (organized in
-  	standard Connectome DB file structure).  It is used to replace a dummy
-  	string in the template scene so that the generated per-subject scene
-  	file can find the necessary file inputs.
+4. Enter this command at a terminal window:
 
-  * TemplateFolder is the location of the unzipped StructuralQC.zip
-  	folder on your system.  The script will copy reference files (S900* and
-  	mean MNI152 T1 atlas target) to your OutputFolder, so that the scenes can
-  	find them.
+    ~~~~
+    bash GenerateStructuralScenes.sh
+    ~~~~
 
-# Enter this command at a terminal window:
+5. Confirm the scenes were generated:
 
-	bash GenerateStructuralScenes.sh
-
-# Confirm the scenes were generated:
-
-	cd $StudyFolder
-	
+    ~~~~
+	cd $StudyFolder	
 	ls
+    ~~~~
 
-  There should be one scene file for each subject in $SubjList.
-  (Each of which contains multiple scenes available for showing in wb_view).
+    There should be one scene file for each subject in `SubjList`.
+    (Each of which contains multiple scenes available for showing in `wb_view`).
 
-# View the scene file using wb_view:
+6. View the scene file using wb_view:
 
+    ~~~~
 	wb_view "$Subject".structuralQC.wb.scene
-	
+	~~~~
