@@ -20,7 +20,7 @@ Authors: Michael Harms and Donna Dierker
         * a `templates` directory that contains files that are needed to render the scenes.
     * You will probably invoke the script multiple times (i.e., for different batches of subjects).
 
-3. Use a text editor to edit the following variables:
+3. Use a text editor to edit the following variables in the `GenerateStructuralScenes.sh` script:
 
     ~~~~
     SubjList="176239 199958 415837 433839 943862 987983"
@@ -36,10 +36,10 @@ Authors: Michael Harms and Donna Dierker
       standard ConnectomeDB file structure).  It is used to replace a dummy
       string in the template scene so that the generated per-subject scene
       file can find the necessary file inputs.
-    * `TemplateFolder` is the location of the unzipped `StructuralQC.zip`
-      folder on your system. The script will copy reference files (S900* and
-      mean MNI152 T1 atlas target) to your `OutputFolder`, so that the scenes 
-      can find them.
+    * `TemplateFolder` is the location of the `templates` subdirectory in your 
+      `StructuralQC-master` folder on your system. The script will copy reference 
+      files (S900* and mean MNI152 T1 atlas target) to your `OutputFolder`, so that 
+      the scenes can find them.
 
 4. Enter this command at a terminal window:
 
