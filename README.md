@@ -14,16 +14,15 @@ Authors: Michael Harms and Donna Dierker
 
     The archive contains:
 
-    a. a single script -- GenerateStructuralScenes.sh and
-    b. a 'templates' directory that contains files that are needed to render the scenes.
+    * a single script -- GenerateStructuralScenes.sh and
+    * a 'templates' directory that contains files that are needed to render the scenes.
 
     You will probably invoke the script multiple times (i.e., for different batches of subjects).
 
 3. Use a text editor to edit the following variables:
 
-  SubjList="176239 199958 415837 433839 943862 987983"
-
-  OutputFolder="/location/of/my/QC/output/directory"
+    `SubjList="176239 199958 415837 433839 943862 987983"`
+	`OutputFolder="/location/of/my/QC/output/directory"`
 
   StudyFolder="/location/of/subject/data/directories"
 
