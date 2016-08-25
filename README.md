@@ -6,7 +6,7 @@ Authors: Michael Harms and Donna Dierker
 
 ---------
 
-# Download the StructuralQC.zip archive from GitHub:
+1. Download the StructuralQC.zip archive from GitHub:
 
 	https://github.com/Washington-University/StructuralQC
 
