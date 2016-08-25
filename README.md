@@ -8,14 +8,14 @@ Authors: Michael Harms and Donna Dierker
 
 1. Download the StructuralQC.zip archive from GitHub:
 
-    * Visit: https://github.com/Washington-University/StructuralQC
-    * Choose the `Clone or download` pulldown near the upper right
-    * Select the `Download Zip` link on the pulldown
+    * Visit: https://github.com/Washington-University/StructuralQC/releases
+    * Under `Downloads` choose the `Source code (zip)` link for the latest release
+    * The resulting `.zip` file will be named `StructuralQC-x.y.z` where `x.y.z` reflect the version number.
 
 2. Unzip the archive in a directory where you have read and write permission.
 
-    * The resulting subdirectory will be named `StructuralQC-master`
-	* The StructuralQC-master directory will contain:
+    * The resulting subdirectory will be named `StructuralQC-x.y.z` (e.g. StructuralQC-1.0.1)
+	* The StructuralQC-x.y.z directory will contain:
         * a single script -- `GenerateStructuralScenes.sh` and
         * a `templates` directory that contains files that are needed to render the scenes.
     * You will probably invoke the script multiple times (i.e., for different batches of subjects).
@@ -37,7 +37,7 @@ Authors: Michael Harms and Donna Dierker
       string in the template scene so that the generated per-subject scene
       file can find the necessary file inputs.
     * `TemplateFolder` is the location of the `templates` subdirectory in your 
-      `StructuralQC-master` folder on your system. The script will copy reference 
+      `StructuralQC-x.y.z` folder on your system. The script will copy reference 
       files (S900* and mean MNI152 T1 atlas target) to your `OutputFolder`, so that 
       the scenes can find them.
 
