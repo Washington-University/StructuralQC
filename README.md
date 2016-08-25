@@ -4,7 +4,7 @@ Generating Workbench Scenes for Structural Quality Control
 
 Authors: Michael Harms and Donna Dierker
 
----------
+## Use
 
 1. Download the StructuralQC.zip archive from GitHub:
 
