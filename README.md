@@ -14,7 +14,7 @@ Authors: Michael Harms and Donna Dierker
 
 2. Unzip the archive in a directory where you have read and write permission.
 
-    * The resulting subdirectory will be named `StructuralQC-x.y.z` (e.g., StructuralQC-1.0.3)
+    * The resulting subdirectory will be named `StructuralQC-x.y.z` (e.g., StructuralQC-1.1.0)
     * The StructuralQC-x.y.z directory will contain:
         * a single script -- `GenerateStructuralScenes.sh` and
         * a `templates` directory that contains files that are needed to render the scenes.
