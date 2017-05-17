@@ -14,7 +14,7 @@ Authors: Michael Harms and Donna Dierker
 
 2. Unzip the archive in a directory where you have read and write permission.
 
-    * The resulting subdirectory will be named `StructuralQC-x.y.z` (e.g., StructuralQC-1.0.2)
+    * The resulting subdirectory will be named `StructuralQC-x.y.z` (e.g., StructuralQC-1.0.3)
     * The StructuralQC-x.y.z directory will contain:
         * a single script -- `GenerateStructuralScenes.sh` and
         * a `templates` directory that contains files that are needed to render the scenes.
@@ -38,7 +38,7 @@ Authors: Michael Harms and Donna Dierker
       file can find the necessary file inputs.
     * `TemplateFolder` is the location of the `templates` subdirectory in your 
       `StructuralQC-x.y.z` folder on your system. The script will copy reference 
-      files (S900* and mean MNI152 T1 atlas target) to your `OutputFolder`, so that 
+      files (S1200* and mean MNI152 T1 atlas target) to your `OutputFolder`, so that 
       the scenes can find them.
 
 4. Enter this command at a terminal window:
