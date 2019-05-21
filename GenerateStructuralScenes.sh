@@ -195,17 +195,6 @@ for Subject in $SubjList; do
 
   AtlasSpaceFolder=$StudyFolder/$Subject/MNINonLinear
 
-  # volumeDistortion=$OutputSceneFolderSubj/$Subject.voldistort.nii.gz
-  # wb_command -volume-distortion $AtlasSpaceFolder/xfms/acpc_dc2standard.nii.gz \
-  # 	  $volumeDistortion -fnirt $AtlasSpaceFolder/xfms/standard2acpc_dc.nii.gz
-  # wb_command -volume-math "ln(x)/ln(2)" $volumeDistortion -var x $volumeDistortion
-
-  # # Reverse the order
-  # volumeDistortion=$OutputSceneFolderSubj/$Subject.voldistortRev.nii.gz
-  # wb_command -volume-distortion $AtlasSpaceFolder/xfms/standard2acpc_dc.nii.gz \
-  # 	  $volumeDistortion -fnirt $AtlasSpaceFolder/xfms/acpc_dc2standard.nii.gz
-  # wb_command -volume-math "ln(x)/ln(2)" $volumeDistortion -var x $volumeDistortion
-
   # Convert FNIRT's Jacobian to log base 2
   jacobian=$AtlasSpaceFolder/xfms/NonlinearRegJacobians.nii.gz
   jacobianLog2=$OutputSceneFolderSubj/$Subject.NonlinearRegJacobians_log2.nii.gz
