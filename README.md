@@ -38,12 +38,12 @@ Authors: Michael Harms and Donna Dierker
       standard ConnectomeDB file structure).
     * `OutputSceneFolder` controls where the per-subject scenes (and a small number of
 	  other created files) get saved. 
-	  	* If set to the empty string (""), the files for each subject will go into their `$StudyFolder/$Subject/MNINonLinear/StructuralQC` directory.  Obviously, this requires that you have write permission into the
-	  $StudyFolder tree!
+	  	* If set to the empty string (`""`), the files for each subject will go into their `$StudyFolder/$Subject/MNINonLinear/StructuralQC` directory.  Obviously, this requires that you have write permission into the
+	  `$StudyFolder` tree!
 	    * Otherwise, it specifies the "common" directory where the scene files go for all subjects.
 	* `CopyTemplates`
-		* If TRUE, the script will copy reference files (S1200* and mean MNI152 T1 atlas target) to `OutputSceneFolder`, and use the copies at that location in the scene.
-		* If FALSE, the script determines the relative path to `TemplatesFolder`, and uses that for creating the scene.
+		* If TRUE, the script will copy reference files (S1200* and mean MNI152 T1 atlas target) to `OutputSceneFolder` (per the interpretation provided above), and use the copies at that location in the scene.
+		* If FALSE, the script determines the relative path to `$TemplatesFolder`, and uses that for creating the scene.
 
 4. Enter this command at a terminal window:
 
