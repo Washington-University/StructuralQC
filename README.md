@@ -59,4 +59,4 @@ Authors: Michael Harms and Donna Dierker
     wb_view "$Subject".structuralQC.wb.scene
     ~~~~
 
-    Note that each scene file actually contains multiple scenes available for showing in `wb_view`.
+    Note that each scene file actually contains multiple scenes available for showing in `wb_view`. Each individual scene contains a brief description of its contents within the Scenes window.
