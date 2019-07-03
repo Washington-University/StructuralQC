@@ -185,6 +185,19 @@ for Subject in $SubjList; do
 	fi
   done
 
+  ## Map the T1w_acpc space volume into MNI152 space, using just the affine (linear) component
+  ## [Similar to the 'MNINonLinear/xfms/T1w_acpc_dc_restore_brain_to_MNILinear.nii.gz' volume
+  ## (created in AtlasRegistrationToMNI152_FLIRTandFNIRT.sh) 
+  ## except applied to the NON-brain-extracted volume].
+  acpc2MNILinear=$AtlasSpaceFolder/xfms/acpc2MNILinear.mat
+  if [ -e "$acpc2MNILinear" ]; then
+	  nativeVol=T1w_acpc_dc_restore
+	  flirt -interp spline -init $acpc2MNILinear -applyxfm \
+			-in $AtlasSpaceFolder/../T1w/$nativeVol \
+			-ref $AtlasSpaceFolder/T1w_restore \
+			-out $OutputSceneFolderSubj/$Subject.${nativeVol}_to_MNILinear
+  fi
+  
   ## Create a surface-mapped version of the FNIRT volume distortion (for easy visualization).
   ## We could use wb_command -volume-distortion on MNINonLinear/xfms/acpc_dc2standard.nii.gz, 
   ## but its "isotropic" distortion (1st volume) is basically the same as the -jout (Jacobian) 
