@@ -6,8 +6,6 @@
 ##
 ## ----------------------------------------------------------
 
-## EDIT the following variables ##
-
 #set -x  # If you want a verbose listing of all the commands, uncomment this line
 
 SubjList="SubjID1 SubjID2 SubjID3"  # SPACE separated list of subject IDs
@@ -37,10 +35,130 @@ OutputSceneFolder=""  # EMPTY string has special interpretation -- see above!
 CopyTemplates=FALSE
 
 
+# If CopyTemplates is true, you may want to copy the files as symlinks rather than making copies of the files.
+# If $CopyTemplatesAs is set to "SYMLINKS", the templates will be copied as symlinks.  Otherwise
+# if $CopyTemplatesAs is set to "FILES" or any other value, the templates will be copied as files
+CopyTemplatesAs=FILES
+
 ### --------------------------------------------- ###
 ### From here onward should not need any modification
 
 verbose=0
+
+while true; do 
+    case "$1" in
+      --help | -h | -\?)
+	printf "\nGenerateStructuralScenes.sh [options]\n\n"
+	printf "   Options\n\n"
+	printf "      -s, --subj-list             <space delimited subject list (quoted)>\n"
+	printf "      -t, --templates-folder      <path to templates folder>\n"
+	printf "      -f, --study-folder          <path to study folder>\n"
+	printf "      -o, --output-scene-folder   <path to output scene folder (optional)>\n"
+	printf "      -c, --copy-templates        [Create copy of templates files in output directory?]\n"
+	printf "      -a, --copy-templates-as     <FILES|SYMLINKS>\n"
+	printf "      -w, --wb-command-path       <path to wb_command (optional, if not available on path)>\n"
+	printf "      -f, --fsl-path              <path to fsl executable (optional, if not setup and available on path)>\n"
+	printf "      -v, --verbose               [Verbose Output Requested?]\n"
+	printf "\n\n"
+	exit 0
+	;;
+      --subj-list | -s)
+        SubjList=$2
+	shift
+	shift
+        ;;
+      --templates-folder | -t)
+        TemplatesFolder=$2
+	shift
+	shift
+        ;;
+      --study-folder | -f)
+        StudyFolder=$2
+	shift 
+	shift 
+        ;;
+      --output-scene-folder | -o)
+	OutputSceneFolder=$2
+	shift 
+	shift 
+        ;;
+      --copy-templates | -c)
+	CopyTemplates=TRUE
+	shift 
+        ;;
+      --copy-templates-as | -a)
+	CopyTemplatesAs=$2
+	shift 
+	shift 
+        ;;
+      --wb-command-path | -w)
+	WbCommandPath=$2
+	shift 
+	shift 
+        ;;
+      --fsl-path | -f)
+	FslPath=$2
+	shift 
+	shift 
+        ;;
+      --verbose | -v)
+	verbose=1
+	shift 
+        ;;
+      -*)
+	echo "Invalid parameter ($1)"
+	exit 1
+        ;;
+      *)
+	break 
+        ;;
+    esac
+done
+
+if (( $verbose )) ; then
+	printf "Continue processing using the following values:\n\n"
+	echo "   SubjList=$SubjList"
+	echo "   TemplatesFolder=$TemplatesFolder"
+	echo "   StudyFolder=$StudyFolder"
+	echo "   OutputSceneFolder=$OutputSceneFolder"
+	echo "   CopyTemplates=$CopyTemplates"
+	echo "   CopyTemplatesAs=$CopyTemplatesAs"
+	echo "   WbCommandPath=$WbCommandPath"
+	echo "   FslPath=$FslPath"
+	echo "   verbose=$verbose"
+fi
+
+if [ ! -z "$WbCommandPath" ]; then
+	printf "\nSetting wb_command environment....."
+	if [ ! -f ${WbCommandPath}/wb_command ] ; then
+		printf "\nERROR:  Couldn't find wb_command executable in $WbCommandPath\n"
+	else
+		if [[ "$PATH" != *"$WbCommandPath"* ]] ; then
+			echo "UPDATING PATH!!!!"
+	        	PATH="${PATH}:${WbCommandPath}"
+		fi
+		printf "Done.\n\n"
+	fi
+fi
+
+if [ ! -z "$FslPath" ]; then
+	printf "\nSetting FSL environment....."
+	if [ ! -f ${FslPath}/fsl ] ; then
+		printf "\nERROR:  Couldn't find FSL executable in $FslPath\n"
+	else
+		if [[ "$PATH" != *"$FslPath"* ]] ; then
+			echo "UPDATING PATH!!!!"
+        		PATH="${PATH}:${FslPath}"
+		fi
+       		source ${FslPath}/../etc/fslconf/fsl.sh
+		printf "Done.\n\n"
+	fi
+fi
+
+export PATH
+
+which wb_command &> /dev/null || { echo "ERROR:  Couldn't find wb_command.  Exiting...." ; exit 1 ; }
+which fsl &> /dev/null || { echo "ERROR:  Couldn't find fsl command.  Exiting...." ; exit 1 ;  }
 
 # Convert TemplatesFolder and StudyFolder to absolute paths (for convenience in reporting locations).
 # Do NOT do the same here with OutputSceneFolder, for which the empty string has special meaning!
@@ -54,11 +172,27 @@ function copyTemplateFiles {
 	local templateDir=$1
 	local targetDir=$2
 
-	if (( verbose )); then
-		echo "Copying template files to $targetDir"
+	if [ $CopyTemplatesAs != "SYMLINKS" ]; then
+		if (( $verbose )); then
+			echo "Copying template files to $targetDir as files"
+		fi
+		cp $templateDir/S1200.{MyelinMap,sulc}* $targetDir/.
+		cp $templateDir/MNI152_T1_0.8mm.nii.gz $targetDir/.
+	else
+		if (( $verbose )); then
+			echo "Copying template files to $targetDir as symlinks"
+		fi
+		for FIL in `find $templateDir -regextype posix-extended -regex  '^.*(MNI152|S1200.*(MyelinMap|sulc)).*$'`; do
+			FN=`basename $FIL`
+			ln -s $FIL $targetDir/$FN
+			RL=`readlink $targetDir/$FN`
+			RLC=`readlink -f $targetDir/$FN`
+			if [ "$RL" != "$RLC" ] ; then
+				echo "Converting relative template links to absolute link ($targetDir/$FN)"
+				ln -sf $RLC $targetDir/$FN 
+			fi
+		done
 	fi
-	cp $templateDir/S1200.{MyelinMap,sulc}* $targetDir/.
-	cp $templateDir/MNI152_T1_0.8mm.nii.gz $targetDir/.
 }
 
 # ----------------------------
@@ -125,7 +259,7 @@ if [ -n "$OutputSceneFolder" ]; then
 	else
 		relPathToTemplates=$(relativePath $OutputSceneFolderSubj $TemplatesFolder)
 	fi
-	if (( verbose )) ; then
+	if (( $verbose )); then
 		echo "TemplatesFolder: $TemplatesFolder"
 		echo "StudyFolder: $StudyFolder"
 		echo "OutputSceneFolder: $(cd $OutputSceneFolderSubj; pwd)"
@@ -138,6 +272,18 @@ fi
 for Subject in $SubjList; do
 	
   echo "Subject: $Subject"
+
+  if (( $verbose )) ; then
+	printf "\nVerifying study folder...."
+  fi
+  if [ -d $StudyFolder/$Subject/MNINonLinear/xfms ] ; then
+	if (( $verbose )) ; then
+		printf "Done.\n"
+	fi
+  else 
+	printf "\nERROR:  Study folder missing expected directory $StudyFolder/$Subject/MNINonLinear/xfms\n"
+	exit 1
+  fi
 
   # If $OutputSceneFolder is empty, then we use $StudyFolder/$Subject/MNINonLinear/StructuralQC
   # as the output folder for each individual subject
@@ -153,7 +299,7 @@ for Subject in $SubjList; do
 	else
 		relPathToTemplates=$(relativePath $OutputSceneFolderSubj $TemplatesFolder)
 	fi
-	if (( verbose )) ; then
+	if (( $verbose )); then
 		echo "... TemplatesFolder: $TemplatesFolder"
 		echo "... StudyFolder: $StudyFolder"
 		echo "... OutputSceneFolder: $(cd $OutputSceneFolderSubj; pwd)"
