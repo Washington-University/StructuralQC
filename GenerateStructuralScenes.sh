@@ -157,6 +157,8 @@ if [ ! -z "$WbCommandPath" ]; then
 	fi
 fi
 
+#MPH: Script currently uses 'flirt', but probably could write script to use
+# wb_command -volume-affine-resample instead, to eliminate need for FSL
 if [ ! -z "$FslPath" ]; then
 	printf "\nSetting FSL environment....."
 	if [ ! -f ${FslPath}/fsl ] ; then
