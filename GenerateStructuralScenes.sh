@@ -62,7 +62,6 @@ Usage() {
 	printf "      -c, --copy-templates        [Create copy of templates files in output directory?]\n"
 	printf "      -a, --copy-templates-as     <FILES|SYMLINKS>\n"
 	printf "      -w, --wb-command-path       <path to wb_command (optional, if not available on path)>\n"
-	printf "      -f, --fsl-path              <path to fsl executable (optional, if not setup and available on path)>\n"
 	printf "      -v, --verbose               [Verbose Output Requested?]\n"
 	printf "\n\n"
 }
@@ -112,11 +111,6 @@ while true; do
 		  shift 
 		  shift 
           ;;
-      --fsl-path | -f)
-		  FslPath=$2
-		  shift 
-		  shift 
-          ;;
       --verbose | -v)
 		  verbose=1
 		  shift 
@@ -140,7 +134,6 @@ if (( $verbose )) ; then
 	echo "   CopyTemplates=$CopyTemplates"
 	echo "   CopyTemplatesAs=$CopyTemplatesAs"
 	echo "   WbCommandPath=$WbCommandPath"
-	echo "   FslPath=$FslPath"
 	echo "   verbose=$verbose"
 fi
 
@@ -157,26 +150,9 @@ if [ ! -z "$WbCommandPath" ]; then
 	fi
 fi
 
-#MPH: Script currently uses 'flirt', but probably could write script to use
-# wb_command -volume-affine-resample instead, to eliminate need for FSL
-if [ ! -z "$FslPath" ]; then
-	printf "\nSetting FSL environment....."
-	if [ ! -f ${FslPath}/fsl ] ; then
-		printf "\nERROR:  Couldn't find FSL executable in $FslPath\n"
-	else
-		if [[ "$PATH" != *"$FslPath"* ]] ; then
-			echo "UPDATING PATH!!!!"
-        		PATH="${PATH}:${FslPath}"
-		fi
-       		source ${FslPath}/../etc/fslconf/fsl.sh
-		printf "Done.\n\n"
-	fi
-fi
-
 export PATH
 
 which wb_command &> /dev/null || { echo "ERROR:  Couldn't find wb_command.  Exiting...." ; exit 1 ; }
-which fsl &> /dev/null || { echo "ERROR:  Couldn't find fsl command.  Exiting...." ; exit 1 ;  }
 
 # Convert TemplatesFolder and StudyFolder to absolute paths (for convenience in reporting locations).
 # Do NOT do the same here with OutputSceneFolder, for which the empty string has special meaning!
@@ -356,10 +332,13 @@ for Subject in $SubjList; do
   acpc2MNILinear=$AtlasSpaceFolder/xfms/acpc2MNILinear.mat
   if [ -e "$acpc2MNILinear" ]; then
 	  nativeVol=T1w_acpc_dc_restore
-	  flirt -interp spline -init $acpc2MNILinear -applyxfm \
-			-in $AtlasSpaceFolder/../T1w/$nativeVol \
-			-ref $AtlasSpaceFolder/T1w_restore \
-			-out $OutputSceneFolderSubj/$Subject.${nativeVol}_to_MNILinear
+	  volumeIn=$AtlasSpaceFolder/../T1w/$nativeVol.nii.gz
+	  volumeRef=$AtlasSpaceFolder/T1w_restore.nii.gz
+	  volumeOut=$OutputSceneFolderSubj/$Subject.${nativeVol}_to_MNILinear.nii.gz
+	  # Use -volume-affine-resample, rather than flirt, for resampling, to avoid adding need for FSL
+	  wb_command -volume-affine-resample \
+		   $volumeIn $acpc2MNILinear $volumeRef CUBIC $volumeOut \
+		   -flirt $volumeIn $volumeRef
   fi
   
   ## Create a surface-mapped version of the FNIRT volume distortion (for easy visualization).
