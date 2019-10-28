@@ -2,11 +2,16 @@
 
 ## Generating Workbench Scenes for Structural Quality Control
 ##
-## Authors: Michael Harms and Donna Dierker
+## Authors: Michael Harms, Michael Hodge, and Donna Dierker
 ##
 ## ----------------------------------------------------------
 
 #set -x  # If you want a verbose listing of all the commands, uncomment this line
+
+
+### --------------------------------------------- ###
+### Set Defaults
+### --------------------------------------------- ###
 
 SubjList="SubjID1 SubjID2 SubjID3"  # SPACE separated list of subject IDs
 
@@ -34,10 +39,9 @@ OutputSceneFolder=""  # EMPTY string has special interpretation -- see above!
 # copy of the template files for each individual subject.
 CopyTemplates=FALSE
 
-
-# If CopyTemplates is true, you may want to copy the files as symlinks rather than making copies of the files.
-# If $CopyTemplatesAs is set to "SYMLINKS", the templates will be copied as symlinks.  Otherwise
-# if $CopyTemplatesAs is set to "FILES" or any other value, the templates will be copied as files
+# If $CopyTemplates is TRUE, you may want to copy the files as symlinks rather than making copies of the files.
+# If $CopyTemplatesAs is set to "SYMLINKS", the templates will be copied as symlinks.
+# Otherwise if $CopyTemplatesAs is set to "FILES" or any other value, the templates will be copied as files.
 CopyTemplatesAs=FILES
 
 ### --------------------------------------------- ###
@@ -45,73 +49,85 @@ CopyTemplatesAs=FILES
 
 verbose=0
 
-while true; do 
-    case "$1" in
-      --help | -h | -\?)
-	printf "\nGenerateStructuralScenes.sh [options]\n\n"
+scriptName=$(basename "${0}")
+
+Usage() {
+	printf "\n${scriptName} [options]\n\n"
 	printf "   Options\n\n"
 	printf "      -s, --subj-list             <space delimited subject list (quoted)>\n"
 	printf "      -t, --templates-folder      <path to templates folder>\n"
 	printf "      -f, --study-folder          <path to study folder>\n"
 	printf "      -o, --output-scene-folder   <path to output scene folder (optional)>\n"
+	printf "                                     Defaults to <StudyFolder>/<Subject>/MNINonLinear/StructuralQC\n"
 	printf "      -c, --copy-templates        [Create copy of templates files in output directory?]\n"
 	printf "      -a, --copy-templates-as     <FILES|SYMLINKS>\n"
 	printf "      -w, --wb-command-path       <path to wb_command (optional, if not available on path)>\n"
 	printf "      -f, --fsl-path              <path to fsl executable (optional, if not setup and available on path)>\n"
 	printf "      -v, --verbose               [Verbose Output Requested?]\n"
 	printf "\n\n"
+}
+
+if [ "$#" = "0" ]; then
+	Usage
 	exit 0
-	;;
+fi
+
+while true; do 
+    case "$1" in
+      --help | -h | -\?)
+		  Usage
+		  exit 0
+		  ;;
       --subj-list | -s)
-        SubjList=$2
-	shift
-	shift
-        ;;
+          SubjList=$2
+		  shift
+		  shift
+          ;;
       --templates-folder | -t)
-        TemplatesFolder=$2
-	shift
-	shift
-        ;;
+          TemplatesFolder=$2
+		  shift
+		  shift
+          ;;
       --study-folder | -f)
-        StudyFolder=$2
-	shift 
-	shift 
-        ;;
+          StudyFolder=$2
+		  shift 
+		  shift 
+          ;;
       --output-scene-folder | -o)
-	OutputSceneFolder=$2
-	shift 
-	shift 
-        ;;
+		  OutputSceneFolder=$2
+		  shift 
+		  shift 
+          ;;
       --copy-templates | -c)
-	CopyTemplates=TRUE
-	shift 
-        ;;
+		  CopyTemplates=TRUE
+		  shift 
+          ;;
       --copy-templates-as | -a)
-	CopyTemplatesAs=$2
-	shift 
-	shift 
-        ;;
+		  CopyTemplatesAs=$2
+		  shift 
+		  shift 
+          ;;
       --wb-command-path | -w)
-	WbCommandPath=$2
-	shift 
-	shift 
-        ;;
+		  WbCommandPath=$2
+		  shift 
+		  shift 
+          ;;
       --fsl-path | -f)
-	FslPath=$2
-	shift 
-	shift 
-        ;;
+		  FslPath=$2
+		  shift 
+		  shift 
+          ;;
       --verbose | -v)
-	verbose=1
-	shift 
-        ;;
+		  verbose=1
+		  shift 
+          ;;
       -*)
-	echo "Invalid parameter ($1)"
-	exit 1
-        ;;
+		  echo "Invalid parameter ($1)"
+		  exit 1
+          ;;
       *)
-	break 
-        ;;
+		  break 
+          ;;
     esac
 done
 
@@ -273,22 +289,26 @@ for Subject in $SubjList; do
 	
   echo "Subject: $Subject"
 
+  # Define some convenience variables
+  AtlasSpaceFolder=$StudyFolder/$Subject/MNINonLinear
+  mesh="164k_fs_LR"
+
   if (( $verbose )) ; then
 	printf "\nVerifying study folder...."
   fi
-  if [ -d $StudyFolder/$Subject/MNINonLinear/xfms ] ; then
+  if [ -d $AtlasSpaceFolder/xfms ] ; then
 	if (( $verbose )) ; then
 		printf "Done.\n"
 	fi
   else 
-	printf "\nERROR:  Study folder missing expected directory $StudyFolder/$Subject/MNINonLinear/xfms\n"
+	printf "\nERROR:  Study folder missing expected directory ${AtlasSpaceFolder}/xfms\n"
 	exit 1
   fi
 
-  # If $OutputSceneFolder is empty, then we use $StudyFolder/$Subject/MNINonLinear/StructuralQC
+  # If $OutputSceneFolder is empty, then we use $AtlasSpaceFolder/StructuralQC
   # as the output folder for each individual subject
   if [ -z "$OutputSceneFolder" ]; then
-	OutputSceneFolderSubj=$StudyFolder/$Subject/MNINonLinear/StructuralQC
+	OutputSceneFolderSubj=$AtlasSpaceFolder/StructuralQC
 	mkdir -p $OutputSceneFolderSubj
 	# Note: the TEMPLATE scene file is designed with "StudyFolder" as the "base" of its paths,
 	# so want to still compute the relative path to $StudyFolder (rather than say $StudyFolder/$Subject/MNINonLinear)
@@ -315,10 +335,6 @@ for Subject in $SubjList; do
 	  -e "s|${SubjectIDDummyStr}|${Subject}|g" \
 	  -e "s|${TemplatesFolderDummyStr}|${relPathToTemplates}|g" \
 	  $TemplatesFolder/TEMPLATE_structuralQC.scene > $SubjectSceneFile
-
-  # Define some convenience variables
-  AtlasSpaceFolder=$StudyFolder/$Subject/MNINonLinear
-  mesh="164k_fs_LR"
 
   # If StrainJ maps don't exist for the various registrations, 
   # but ArealDistortion maps do, use those instead
@@ -351,8 +367,6 @@ for Subject in $SubjList; do
   ## because the fnirt jacobian doesn't include the affine component)?
   ## So, since the fnirt jacobian is already part of the HCPpipelines output, we'll
   ## use that for convenience
-
-  AtlasSpaceFolder=$StudyFolder/$Subject/MNINonLinear
 
   # Convert FNIRT's Jacobian to log base 2
   jacobian=$AtlasSpaceFolder/xfms/NonlinearRegJacobians.nii.gz
