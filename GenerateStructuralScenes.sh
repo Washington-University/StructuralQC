@@ -385,6 +385,17 @@ for Subject in $SubjList; do
 	  -pos-user $posMinMax -neg-user $negMinMax -interpolate true -palette-name $paletteName \
 	  -disp-pos true -disp-neg true -disp-zero false
 
+  # Generate png snapshots of the scenes
+  pushd $OutputSceneFolderSubj &> /dev/null
+  pngDir=snapshots
+  mkdir -p ${pngDir}
+  sceneFile=${Subject}.structuralQC.wb.scene
+  numScenes=$(grep "SceneInfo Index" $sceneFile | wc -l)
+  for (( ind=1; ind<=$numScenes; ind++ )); do
+  	wb_command -show-scene $sceneFile $ind ${pngDir}/${sceneFile}${ind}.png 100 100 -use-window-size
+  done
+  popd &> /dev/null
+
   # Cleanup
   rm $Subject.$mapName.{L,R}.$mesh.func.gii
 
