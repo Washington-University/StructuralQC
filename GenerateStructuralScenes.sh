@@ -166,6 +166,10 @@ function copyTemplateFiles {
 	local templateDir=$1
 	local targetDir=$2
 
+	# Remove any pre-existing template files
+	rm -f $targetDir/S1200.{MyelinMap,sulc}* 
+	rm -f $targetDir/MNI152_T1_0.8mm.nii.gz
+	
 	if [ $CopyTemplatesAs != "SYMLINKS" ]; then
 		if (( $verbose )); then
 			echo "Copying template files to $targetDir as files"
